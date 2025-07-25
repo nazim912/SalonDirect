@@ -1,0 +1,40 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Message = exports.Review = exports.Reservation = exports.Service = exports.Salon = exports.User = void 0;
+const User_1 = __importDefault(require("./User"));
+exports.User = User_1.default;
+const Salon_1 = __importDefault(require("./Salon"));
+exports.Salon = Salon_1.default;
+const Service_1 = __importDefault(require("./Service"));
+exports.Service = Service_1.default;
+const Reservation_1 = __importDefault(require("./Reservation"));
+exports.Reservation = Reservation_1.default;
+const Review_1 = __importDefault(require("./Review"));
+exports.Review = Review_1.default;
+const Message_1 = __importDefault(require("./Message"));
+exports.Message = Message_1.default;
+const database_1 = __importDefault(require("../config/database"));
+User_1.default.hasMany(Salon_1.default, { foreignKey: 'ownerId' });
+Salon_1.default.belongsTo(User_1.default, { foreignKey: 'ownerId' });
+Salon_1.default.hasMany(Service_1.default, { foreignKey: 'salonId' });
+Service_1.default.belongsTo(Salon_1.default, { foreignKey: 'salonId' });
+Salon_1.default.hasMany(Reservation_1.default, { foreignKey: 'salonId' });
+Reservation_1.default.belongsTo(Salon_1.default, { foreignKey: 'salonId' });
+User_1.default.hasMany(Reservation_1.default, { foreignKey: 'clientId' });
+Reservation_1.default.belongsTo(User_1.default, { foreignKey: 'clientId' });
+Service_1.default.hasMany(Reservation_1.default, { foreignKey: 'serviceId' });
+Reservation_1.default.belongsTo(Service_1.default, { foreignKey: 'serviceId' });
+User_1.default.hasMany(Review_1.default, { foreignKey: 'userId' });
+Review_1.default.belongsTo(User_1.default, { foreignKey: 'userId' });
+Salon_1.default.hasMany(Review_1.default, { foreignKey: 'salonId' });
+Review_1.default.belongsTo(Salon_1.default, { foreignKey: 'salonId' });
+Reservation_1.default.hasMany(Message_1.default, { foreignKey: 'reservationId' });
+Message_1.default.belongsTo(Reservation_1.default, { foreignKey: 'reservationId' });
+User_1.default.hasMany(Message_1.default, { foreignKey: 'senderId', as: 'sentMessages' });
+User_1.default.hasMany(Message_1.default, { foreignKey: 'receiverId', as: 'receivedMessages' });
+database_1.default.sync({ alter: true })
+    .then(() => console.log('✅ Modèles synchronisés avec la base de données'))
+    .catch((err) => console.error('❌ Erreur de synchronisation des modèles :', err));
