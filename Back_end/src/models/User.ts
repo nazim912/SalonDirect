@@ -6,18 +6,33 @@ class User extends Model {
   declare name: string;
   declare email: string;
   declare passwordHash: string;
-  declare role: 'client' | 'coiffeur' | 'admin';
-  declare createdAt: CreationOptional<Date>;
+  declare role: 'client' | 'admin';
 }
 
 User.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    name: { type: DataTypes.STRING, allowNull: false },
-    email: { type: DataTypes.STRING, unique: true, allowNull: false },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [2, 100],
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
     passwordHash: { type: DataTypes.STRING, allowNull: false },
-    role: { type: DataTypes.ENUM('client', 'coiffeur', 'admin'), allowNull: false },
-    createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    role: {
+      type: DataTypes.ENUM('client', 'admin'),
+      allowNull: false,
+      defaultValue: 'client',
+    },
   },
   {
     sequelize,

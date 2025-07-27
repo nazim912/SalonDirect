@@ -4,6 +4,7 @@ import Service from './Service';
 import Reservation from './Reservation';
 import Review from './Review';
 import Message from './Message';
+import AdminRequest from './AdminRequest'; 
 import sequelize from '../config/database';
 
 User.hasMany(Salon, { foreignKey: 'ownerId' });
@@ -33,9 +34,12 @@ Message.belongsTo(Reservation, { foreignKey: 'reservationId' });
 User.hasMany(Message, { foreignKey: 'senderId', as: 'sentMessages' });
 User.hasMany(Message, { foreignKey: 'receiverId', as: 'receivedMessages' });
 
+User.hasMany(AdminRequest, { foreignKey: 'userId', as: 'adminRequests' });
+AdminRequest.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
 sequelize.sync({ alter: true })
-  .then(() => console.log('✅ Modèles synchronisés avec la base de données'))
-  .catch((err) => console.error('❌ Erreur de synchronisation des modèles :', err));
+  .then(() => console.log('Modèles synchronisés avec la base de données'))
+  .catch((err) => console.error('Erreur de synchronisation des modèles :', err));
 
 export {
   User,
@@ -43,5 +47,6 @@ export {
   Service,
   Reservation,
   Review,
-  Message
+  Message,
+  AdminRequest
 };
