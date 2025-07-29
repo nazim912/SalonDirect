@@ -37,6 +37,15 @@ export class UserController {
     }
   }
 
+  async logout(req: Request, res: Response) {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+    });
+    res.status(200).json({ status: 'success', message: 'Déconnexion réussie' });
+    }
+
   async getMe(req: Request, res: Response) {
     const userPayload = (req as any).user;
     if (!userPayload?.id)

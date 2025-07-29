@@ -6,7 +6,8 @@ export class AdminRequestService extends BaseService<AdminRequest> {
   constructor() {
     super(AdminRequest);
   }
-  async Demande(userId: number) {
+
+  async demander(userId: number) {
     const existante = await this.model.findOne({
       where: { userId, statut: 'en_attente' } as WhereOptions,
     });
@@ -23,6 +24,7 @@ export class AdminRequestService extends BaseService<AdminRequest> {
     demande.statut = approuvée ? 'approuvée' : 'refusée';
     demande.motif = motif;
     await demande.save();
+
     return demande;
   }
 }

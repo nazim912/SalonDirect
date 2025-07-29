@@ -29,3 +29,4 @@ export default class BaseService<T extends Model> {
     return await item.destroy();
   }
 }
+

@@ -1,30 +1,29 @@
-import { Model, DataTypes, CreationOptional, ForeignKey } from 'sequelize';
+import { Model, DataTypes, CreationOptional } from 'sequelize';
 import sequelize from '../config/database';
 import User from './User';
 
-class AdminRequest extends Model {
+export default class CoiffeurRequest extends Model {
   declare id: CreationOptional<number>;
-  declare userId: ForeignKey<User['id']>;
+  declare userId: number;
   declare statut: 'en_attente' | 'approuvée' | 'refusée';
   declare motif?: string;
+  declare description?: string;
 }
 
-AdminRequest.init(
+CoiffeurRequest.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     userId: { type: DataTypes.INTEGER, allowNull: false },
     statut: {
       type: DataTypes.ENUM('en_attente', 'approuvée', 'refusée'),
       defaultValue: 'en_attente',
-      allowNull: false,
     },
+    motif: { type: DataTypes.TEXT },
+    description: { type: DataTypes.TEXT },
   },
   {
     sequelize,
-    modelName: 'AdminRequest',
-    tableName: 'admin_requests',
-    timestamps: true,
+    modelName: 'CoiffeurRequest',
+    tableName: 'coiffeur_requests',
   }
 );
-
-export default AdminRequest;

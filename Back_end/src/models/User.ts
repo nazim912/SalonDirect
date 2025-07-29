@@ -6,7 +6,7 @@ class User extends Model {
   declare name: string;
   declare email: string;
   declare passwordHash: string;
-  declare role: 'client' | 'admin';
+  declare role: 'client' | 'admin'| 'coiffeur';
 }
 
 User.init(
@@ -29,7 +29,7 @@ User.init(
     },
     passwordHash: { type: DataTypes.STRING, allowNull: false },
     role: {
-      type: DataTypes.ENUM('client', 'admin'),
+      type: DataTypes.ENUM('client', 'admin', 'coiffeur'),
       allowNull: false,
       defaultValue: 'client',
     },

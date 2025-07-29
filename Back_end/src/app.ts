@@ -1,36 +1,18 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
-import sequelize from './config/database';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import apiRoutes from './routes';
 import './models';
-import router from './routes';
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use('/api', router);
+app.use(cookieParser());
 
-app.get('/', (req, res) => res.send('SalonDirect API'));
+app.use('/api', apiRoutes);
 
 const PORT = process.env.PORT || 3000;
-
-async function startServer() {
-  try {
-    console.log('Test ENV:', {
-      DB_HOST: process.env.DB_HOST,
-      DB_USER: process.env.DB_USER,
-      DB_PASSWORD: process.env.DB_PASSWORD,
-    });
-
-    await sequelize.sync();
-    console.log('✅ DB synced');
-
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
-  } catch (err) {
-    console.error('❌ Failed to start server:', err);
-  }
-}
-
-startServer();
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});

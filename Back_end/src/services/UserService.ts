@@ -8,14 +8,15 @@ export class UserService extends BaseService<User> {
     return User.findOne({ where: { email } });
   }
 
-  async updateUserRole(userId: number, role: 'admin' | 'client') {
-  const user = await this.findById(userId);
-  if (!user) throw new Error('Utilisateur non trouvé');
-  return user.update({ role });
-  
+  async updateUserRole(userId: number, newRole: 'admin' | 'client'|'coiffeur') {
+    const user = await this.model.findByPk(userId);
+    if (!user) throw new Error("Utilisateur introuvable");
+    user.role = newRole;
+    await user.save();
+    return user;
 }
 
-  async createUser(data: { name: string; email: string; password: string; role: 'client' | 'admin' }) {
+  async createUser(data: { name: string; email: string; password: string; role: 'client' | 'admin'| 'coiffeur' }) {
     const existing = await this.findByEmail(data.email);
     if (existing) throw new Error('Utilisateur déjà existant');
     const passwordHash = await bcrypt.hash(data.password, 10);
